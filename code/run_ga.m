@@ -31,9 +31,9 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         % initialize population
         Chrom=zeros(NIND,NVAR);
         for row=1:NIND
-        	%Chrom(row,:)=path2adj(randperm(NVAR));
+        	Chrom(row,:)=path2adj(randperm(NVAR));
             %Chrom(row,:)=randperm(NVAR);
-            Chrom(row,:)=path2ord(randperm(NVAR));
+            %Chrom(row,:)=path2ord(randperm(NVAR));
         end
         gen=0;
         % number of individuals of equal fitness needed to stop
@@ -65,8 +65,10 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
                   break;
             end  
             
-            n = longestSubTour(5,Chrom);
+            %n = longestSubTour(5,Chrom);
             % stopping criterium for early convergence
+            % if in defined number of generations (TIMEPRD) there is not
+            % enough improvement -> stop
             if gen>1
                 diff = best(gen-1)-best(gen);
                 if diff < THRSH
@@ -85,15 +87,28 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         	FitnV=ranking(ObjV);
         	%select individuals for breeding
         	SelCh=select('sus', Chrom, FitnV, GGAP);
+            
+             
+            for i=1:size(SelCh,1)            
+                SelCh(i,:)=path2ord(adj2path(SelCh(i,:)));
+            end
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
-            SelCh=mutateTSP('inversion',SelCh,PR_MUT);
+            newSelch=zeros(size(SelCh));
+            for i=1:size(SelCh,1)
+                newSelch(i,:)=path2adj(ord2path(SelCh(i,:)));
+            end
+            SelCh=mutateTSP('inversion',newSelch,PR_MUT);
             %evaluate offspring, call objective function
+            
+            
+            
         	ObjVSel = tspfun(SelCh,Dist);
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
             
             Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+           
         	%increment generation counter
         	gen=gen+1;            
         end

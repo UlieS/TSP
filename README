@@ -1,0 +1,12 @@
+------------------------------------------------------------------
+NOTES ABOUT IMPLEMENTATION OF CROSSOVER FOR ORD REPRESENTATION:
+
+The standard crossover is used. However, the whole implementation is experimental
+and the TSP algorithm is still not fully compatible with ordinal representation. Therefore in this implementation,
+adjacency representation is used, before crossover this representation is transfered into ordinal one, after crossover
+it is transfered back into adj.
+
+Already, one can obsreve, that as written in many articles, the ordinar representation has poor performance.
+A question is, if it is not better to use path representation instead.
+
+-----------------------------------------------------------------
