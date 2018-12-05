@@ -10,3 +10,11 @@ Already, one can obsreve, that as written in many articles, the ordinar represen
 A question is, if it is not better to use path representation instead.
 
 -----------------------------------------------------------------
+
+MUTATION FOR ORD REPRESENTATION
+
+In each individual for each alele a random number r from uniform distribution is generated. If r<PR_MUT, 
+mutate this allele - pick a random number from range 1..(length_of_individual-allele_position) and change 
+the allele to that number.
+
+------------------------------------------------------------------

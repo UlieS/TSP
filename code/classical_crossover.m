@@ -21,17 +21,16 @@ end
 
 for j=finalI+1:2:(size(OldChrom,1))+finalI
     size(OldChrom)
-    p1=randi(round(size(OldChrom,1)),1); 
-    p2=randi(round(size(OldChrom,1)),1);
-    if p1==p2
-        if p1+1<=size(OldChrom,1)
-        p2=p2+1;
-        else
-            p2=p1-1;
-        end
-        
+   
+    if size(OldChrom,1)==1
+        NewChrom(end,:)=OldChrom(end,:);
+        return;
     end
-    
+   
+    [p1,p2]=parent_selection(OldChrom);
+    %p1=randi(round(size(OldChrom,1)),1); 
+    %p2=randi(round(size(OldChrom,1)),1);
+       
     %random point 
     r=randi(round(size(OldChrom,2)),1);
     %size(OldChrom)

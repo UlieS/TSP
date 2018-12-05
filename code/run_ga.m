@@ -94,13 +94,14 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
             end
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
+            SelCh=mutate_ordinal(SelCh,PR_MUT);
             newSelch=zeros(size(SelCh));
             for i=1:size(SelCh,1)
                 newSelch(i,:)=path2adj(ord2path(SelCh(i,:)));
             end
-            SelCh=mutateTSP('inversion',newSelch,PR_MUT);
+            %SelCh=mutateTSP('inversion',newSelch,PR_MUT);
             %evaluate offspring, call objective function
-            
+            SelCh=newSelch;
             
             
         	ObjVSel = tspfun(SelCh,Dist);
