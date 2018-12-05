@@ -31,9 +31,9 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         % initialize population
         Chrom=zeros(NIND,NVAR);
         for row=1:NIND
-        	Chrom(row,:)=path2adj(randperm(NVAR));
+        	%Chrom(row,:)=path2adj(randperm(NVAR));
             %Chrom(row,:)=randperm(NVAR);
-            %Chrom(row,:)=path2ord(randperm(NVAR));
+            Chrom(row,:)=path2ord(randperm(NVAR));
         end
         gen=0;
         % number of individuals of equal fitness needed to stop
@@ -56,7 +56,7 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
                 end
             end
             
-            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+            visualizeTSP(x,y,ord2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
             
             % if the difference between the stopNth individual and the best
             % individual is smaller than 1e-15 we have reached the stopping
@@ -87,28 +87,16 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         	FitnV=ranking(ObjV);
         	%select individuals for breeding
         	SelCh=select('sus', Chrom, FitnV, GGAP);
-            
-             
-            for i=1:size(SelCh,1)            
-                SelCh(i,:)=path2ord(adj2path(SelCh(i,:)));
-            end
+                    
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
             SelCh=mutate_ordinal(SelCh,PR_MUT,Dist);
-            newSelch=zeros(size(SelCh));
-            for i=1:size(SelCh,1)
-                newSelch(i,:)=path2adj(ord2path(SelCh(i,:)));
-            end
-            %SelCh=mutateTSP('inversion',newSelch,PR_MUT);
-            %evaluate offspring, call objective function
-            SelCh=newSelch;
-            
-            
-        	ObjVSel = tspfun(SelCh,Dist);
+                        
+        	ObjVSel = tspfunOrd(SelCh,Dist);
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
             
-            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+            Chrom = tsp_ImprovePopulationOrd(NIND, NVAR, Chrom,LOCALLOOP,Dist);
            
         	%increment generation counter
         	gen=gen+1;            
