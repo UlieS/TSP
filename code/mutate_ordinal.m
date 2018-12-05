@@ -8,8 +8,8 @@ for i=1:size(Popul,1)
             Popul(i,j)=changeTo;
         end
     end
-    fitnes=tspfun(Popul(i,:),Dist);
-    fitnes_prev=tspfun(individual,Dist);
+    fitnes=tspfunOrd(Popul(i,:),Dist);
+    fitnes_prev=tspfunOrd(individual,Dist);
     if fitnes_prev<fitnes
         Popul(i,:)=individual;
     end
