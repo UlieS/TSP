@@ -16,5 +16,6 @@ MUTATION FOR ORD REPRESENTATION
 In each individual for each alele a random number r from uniform distribution is generated. If r<PR_MUT, 
 mutate this allele - pick a random number from range 1..(length_of_individual-allele_position) and change 
 the allele to that number.
+If the mutated individual has worse fitnes than the old one - kill the mutated one and use the old one.
 
 ------------------------------------------------------------------

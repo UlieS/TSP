@@ -94,7 +94,7 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
             end
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
-            SelCh=mutate_ordinal(SelCh,PR_MUT);
+            SelCh=mutate_ordinal(SelCh,PR_MUT,Dist);
             newSelch=zeros(size(SelCh));
             for i=1:size(SelCh,1)
                 newSelch(i,:)=path2adj(ord2path(SelCh(i,:)));
