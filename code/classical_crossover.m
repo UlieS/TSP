@@ -20,7 +20,7 @@ for i=1:1:nI
 end
 
 for j=finalI+1:2:(size(OldChrom,1))+finalI
-    size(OldChrom)
+   % size(OldChrom)
    
     if size(OldChrom,1)==1
         NewChrom(end,:)=OldChrom(end,:);
