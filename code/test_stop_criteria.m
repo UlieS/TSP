@@ -14,10 +14,11 @@ function best_ind = test_stop_criteria()
     CROSSOVER = 'xalt_edges';
     THRSH = [0.05, 0.01, 0.005, 0.001, 0.0005];
     TIMEPRD = [5, 10, 20, 25, 30, 35];
-    best_ind= zeros(1,100,size(THRSH,2)*size(TIMEPRD,2));
+    
     
     datasetslist = dir('../datasets/');
     datasets=cell( size(datasetslist,1)-2,1);
+    best_ind= zeros(1,100,size(datasets,2),size(THRSH,2)*size(TIMEPRD,2));
     
     for i=1:size(datasets,1);
         datasets{i} = datasetslist(i+2).name;
@@ -31,7 +32,7 @@ function best_ind = test_stop_criteria()
             % go through different Timeperiods
             for time=1:size(TIMEPRD,2);
                 best = run_ga_test(x, y, THRSH(1,thr), TIMEPRD(1,time), NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, 1, 1, 1);
-                best_ind(:,:,thr*time) = best;
+                best_ind(:,:,i,thr*time) = best;
             end
         end
           

@@ -12,9 +12,9 @@ function best_ind = test_heuristic()
     PR_MUT=.05;       % probability of mutation
     LOCALLOOP=0;      % local loop removal
     CROSSOVER = 'xalt_edges';
-    THRSH = 0.001;
-    TIMEPRD = 30;
-    
+    THRSH = 0.00005;
+    TIMEPRD =2000;
+   
     datasetslist = dir('../datasets/');
     datasets=cell( size(datasetslist,1)-2,1);
     
@@ -24,7 +24,8 @@ function best_ind = test_heuristic()
         datasets{i} = datasetslist(i+2).name;
         data = load(['../datasets/' datasets{i}]);
         % take out scaling 
-        x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
+        %x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
+        x=data(:,1);y=data(:,2);
         NVAR=size(data,1);
 
         best = run_ga_test(x, y, THRSH, TIMEPRD, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, 1, 1, 1);

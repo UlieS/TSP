@@ -1,12 +1,20 @@
-function visualize_heuristic(x,y);
-    hold all;
-    for i=1:size(y,3);
-        plot(x,y(1,:,i));
-        legend(num2str(i));
-        %hold on;
+function visualize_heuristic(three_opt, two_opt);
+    y = cat(1,three_opt,two_opt);
+    x = [1:size(y,3)];
+    shortest_tours = zeros(2,size(y,3));
+    for num_heuristic=1:2;
+        for b=1:size(y,3);
+            min_array = y(num_heuristic,:,b);
+            shortest_tours(num_heuristic,b) = min(min(y(num_heuristic,:,b)>0));
+        end
     end
-  
-    %legend(b(1:11));
-    %hold off;
+
+    hold on;
+    labels = ["3-opt","2-opt"];
+    plot(x,shortest_tours(1,:));
+    plot(x,shortest_tours(2,:));
+   
+    legend(labels);
+    hold off;
 
 end
