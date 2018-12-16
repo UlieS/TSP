@@ -14,7 +14,7 @@ function result = improve_path (ncities,path,Dist)
 %    result          - The improved path
 
 
-maxlen =  min(3, ncities / 2) ;
+maxlen =  min(2, ncities / 2) ;
 
 for len = 2:maxlen
     for start = 1:ncities

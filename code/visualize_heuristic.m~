@@ -1,0 +1,12 @@
+function visualize_heuristic(x,y);
+    hold all;
+    for i=1:size(y,3);
+        plot(x,y(1,:,i));
+        legend(num2str(i));
+        %hold on;
+    end
+  
+    %legend(b(1:11));
+    %hold off;
+
+end
