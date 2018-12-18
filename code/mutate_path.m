@@ -20,10 +20,10 @@ for i=1:size(OldChrom,1)
      r1=min(rt1,rt2);
      r2=max(rt1,rt2);
      
-     subPath = OldChrom(i,r1:r2)
-     subPath=fliplr(subPath)
+     subPath = OldChrom(i,r1:r2);
+     subPath=fliplr(subPath);
      restLength=(size(OldChrom(i,:),2))-(size(subPath,2));
-     restLength
+   
      if restLength==0
          NewChrom(finalI+i,:)=subPath;
          continue;
@@ -47,13 +47,17 @@ for i=1:size(OldChrom,1)
           if newPath(j)==0
               for t=1:size(newPath,2)
                   if ~ismember(OldChrom(i,t),newPath)
-                      newPath(j)=OldChrom(i,t)
+                      newPath(j)=OldChrom(i,t);
                       break;
                   end
               end
           end
       end
-  
+  % fitnes=tspfunPath(OldChrom(i,:),Dist);
+   % fitnes_prev=tspfunPath(newPath,Dist);
+   % if fitnes_prev<fitnes
+     %   newPath=OldChrom(i,:);
+   % end
     NewChrom(finalI+i,:)=newPath;
 
 end

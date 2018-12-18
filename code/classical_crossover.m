@@ -34,9 +34,9 @@ for j=finalI+1:2:(size(OldChrom,1))+finalI
     %random point 
     r=randi(round(size(OldChrom,2)),1);
     %size(OldChrom)
-    p1
-    p2
-    r
+   % p1
+   % p2
+   % r
     ch1=[OldChrom(p1,1:r-1),OldChrom(p2,r:end)];
     ch2=[OldChrom(p2,1:r-1),OldChrom(p1,r:end)];
     %delete individuals
