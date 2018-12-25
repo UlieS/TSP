@@ -17,8 +17,8 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
 % calculate distance matrix between each pair of cities
 % ah1, ah2, ah3: axes handles to visualise tsp
 {NIND MAXGEN NVAR ELITIST STOP_PERCENTAGE PR_CROSS PR_MUT CROSSOVER LOCALLOOP}
-
-
+        THRSH = 0.001;
+        TIMEPRD = 10;
         GGAP = 1 - ELITIST;
         mean_fits=zeros(1,MAXGEN+1);
         worst=zeros(1,MAXGEN+1);
@@ -31,8 +31,9 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         % initialize population
         Chrom=zeros(NIND,NVAR);
         for row=1:NIND
-        	Chrom(row,:)=path2adj(randperm(NVAR));
+        	%Chrom(row,:)=path2adj(randperm(NVAR));
             %Chrom(row,:)=randperm(NVAR);
+            Chrom(row,:)=path2ord(randperm(NVAR));
         end
         gen=0;
         % number of individuals of equal fitness needed to stop
@@ -42,6 +43,7 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         best=zeros(1,MAXGEN);
         % generational loop
         
+        count = 0;
         while gen<MAXGEN
             sObjV=sort(ObjV);
           	best(gen+1)=min(ObjV);
@@ -54,27 +56,48 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
                 end
             end
             
-            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+            visualizeTSP(x,y,ord2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
             
-            % if the difference between the stopnth individual and the best
+            % if the difference between the stopNth individual and the best
             % individual is smaller than 1e-15 we have reached the stopping
             % criterium
             if (sObjV(stopN)-sObjV(1) <= 1e-15)
                   break;
-            end          
+            end  
+            
+            %n = longestSubTour(5,Chrom);
+            % stopping criterium for early convergence
+            % if in defined number of generations (TIMEPRD) there is not
+            % enough improvement -> stop
+            if gen>1
+                diff = best(gen-1)-best(gen);
+                if diff < THRSH
+                    count = count +1;
+                else 
+                    count = 0;
+                end
+                    
+            end 
+            if count > TIMEPRD
+                break;
+            end
+            
+            
         	%assign fitness values to entire population
         	FitnV=ranking(ObjV);
         	%select individuals for breeding
         	SelCh=select('sus', Chrom, FitnV, GGAP);
+                    
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
-            SelCh=mutateTSP('inversion',SelCh,PR_MUT);
-            %evaluate offspring, call objective function
-        	ObjVSel = tspfun(SelCh,Dist);
+            SelCh=mutate_ordinal(SelCh,PR_MUT,Dist);
+                        
+        	ObjVSel = tspfunOrd(SelCh,Dist);
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
             
-            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+            Chrom = tsp_ImprovePopulationOrd(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+           
         	%increment generation counter
         	gen=gen+1;            
         end
