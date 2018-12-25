@@ -35,14 +35,14 @@ function tour_lengths = test_stop_criteria()
         NVAR=size(data,1);
         
         for p=1:param_count;
-            avg_min= zeros(1,10);
+            avg_min= zeros(10);
             for t=1:10;
                 best = run_ga_test(x, y, G_THRSH(p), G_TIMEPRD(p), NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, 1, 1, 1);
                 minimum = min(best(best>0));
-                avg_min(1,t) = minimum;
+                avg_min(t) = minimum;
             end
-            minimum=mean(avg_min);
-            tour_lengths(i,p,1) = minimum;
+            min=mean(avg_min);
+            tour_lengths(i,p,1) = min;
             tour_lengths(i,p,2) = G_THRSH(p);
             tour_lengths(i,p,3) = G_TIMEPRD(p);
             

@@ -14,15 +14,14 @@ function visualize_stopping(data);
     
     j = 1;
     x = [1:6];
-    sz = linspace(100,100,6);
     for i=1:7;
         hold on;
-        labels = ["5","10", "20", "25", "30", "35", "no stopping criterion"];
+        labels = ["5","10", "20", "25", "30", "35", "none"];
         ylabel("optimal tour length");
-        xlabel("threshold of convergence");
-        xticks([1:6]);
-        xticklabels(["0.05","0.01", "0.005", "0.001", "0.0005", "no stopping criterion"]);
-        scatter(x,cities16(:,j:j+5,1), sz,'filled');
+        xlabel("parameter settings");
+        xticks([1:7]);
+        xticklabels(["0.05","0.01", "0.005", "0.001", "0.0005", "none"]);
+        scatter(x,cities16(:,j:j+5,1), 'filled');
         %scatter(x,cities18(:,:,1), 'filled');
         %scatter(x,cities23(:,:,1), 'filled');
         %scatter(x,cities25(:,:,1), 'filled');
@@ -31,7 +30,7 @@ function visualize_stopping(data);
         
     end
     legend(labels);
-    
+    sz = linspace(1,100,200);
     hold off;
     
 
