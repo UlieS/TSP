@@ -56,7 +56,7 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
                 end
             end
             
-            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+            visualizeTSP(x,y,ord2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
             
             % if the difference between the stopNth individual and the best
             % individual is smaller than 1e-15 we have reached the stopping
@@ -65,7 +65,13 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
                   break;
             end  
             
+<<<<<<< HEAD
+=======
+            %n = longestSubTour(5,Chrom);
+>>>>>>> origin/master
             % stopping criterium for early convergence
+            % if in defined number of generations (TIMEPRD) there is not
+            % enough improvement -> stop
             if gen>1
                 diff = best(gen-1)-best(gen);
                 if diff < THRSH
@@ -84,15 +90,17 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         	FitnV=ranking(ObjV);
         	%select individuals for breeding
         	SelCh=select('sus', Chrom, FitnV, GGAP);
+                    
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
-            SelCh=mutateTSP('inversion',SelCh,PR_MUT);
-            %evaluate offspring, call objective function
-        	ObjVSel = tspfun(SelCh,Dist);
+            SelCh=mutate_ordinal(SelCh,PR_MUT,Dist);
+                        
+        	ObjVSel = tspfunOrd(SelCh,Dist);
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
             
-            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+            Chrom = tsp_ImprovePopulationOrd(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+           
         	%increment generation counter
         	gen=gen+1; 
         end
