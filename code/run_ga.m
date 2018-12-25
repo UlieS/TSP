@@ -16,7 +16,10 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
 % CROSSOVER: the crossover operator
 % calculate distance matrix between each pair of cities
 % ah1, ah2, ah3: axes handles to visualise tsp
-{NIND MAXGEN NVAR ELITIST STOP_PERCENTAGE PR_CROSS PR_MUT CROSSOVER LOCALLOOP}
+
+bests = zeros(1,11);
+for ttt=1:11
+%{NIND MAXGEN NVAR ELITIST STOP_PERCENTAGE PR_CROSS PR_MUT CROSSOVER LOCALLOOP}
         THRSH = 0.001;
         TIMEPRD = 10;
         GGAP = 1 - ELITIST;
@@ -32,8 +35,8 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         Chrom=zeros(NIND,NVAR);
         for row=1:NIND
         	%Chrom(row,:)=path2adj(randperm(NVAR));
-            %Chrom(row,:)=randperm(NVAR);
-            Chrom(row,:)=path2ord(randperm(NVAR));
+            Chrom(row,:)=randperm(NVAR);
+            %Chrom(row,:)=path2ord(randperm(NVAR));
         end
         gen=0;
         % number of individuals of equal fitness needed to stop
@@ -56,8 +59,8 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
                 end
             end
             
-            visualizeTSP(x,y,ord2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
-            
+            %visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+            %visualizeTSP(x,y,Chrom(t,:), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
             % if the difference between the stopNth individual and the best
             % individual is smaller than 1e-15 we have reached the stopping
             % criterium
@@ -86,19 +89,23 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         	%assign fitness values to entire population
         	FitnV=ranking(ObjV);
         	%select individuals for breeding
-        	SelCh=select('sus', Chrom, FitnV, GGAP);
-                    
-        	%recombine individuals (crossover)
+        	SelCh=select('roulete_w_selection', Chrom, FitnV, GGAP);
+            
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
-            SelCh=mutate_ordinal(SelCh,PR_MUT,Dist);
+            SelCh=mutateTSP('mutate_path',SelCh,PR_MUT);
+
                         
-        	ObjVSel = tspfunOrd(SelCh,Dist);
+        	ObjVSel = tspfunPath(SelCh,Dist);
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
             
-            Chrom = tsp_ImprovePopulationOrd(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+            Chrom = tsp_ImprovePopulationPath(NIND, NVAR, Chrom,LOCALLOOP,Dist);
            
         	%increment generation counter
         	gen=gen+1;            
         end
+bests(ttt)=best(gen)
+end
+bests
+%csvwrite('100city95cr13mutloopOnelit10indi200gen110.csv',bests);
 end
