@@ -18,18 +18,26 @@ function best_ind = test_heuristic()
     datasetslist = dir('../datasets/');
     datasets=cell( size(datasetslist,1)-2,1);
     
-    best_ind= zeros(1,100,size(datasets,1));
+    best_ind= zeros(1,size(datasets,1));
     
     for i=1:size(datasets,1);
         datasets{i} = datasetslist(i+2).name;
         data = load(['../datasets/' datasets{i}]);
         % take out scaling 
-        %x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
-        x=data(:,1);y=data(:,2);
+        x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
+        %x=data(:,1);y=data(:,2);
         NVAR=size(data,1);
-
-        best = run_ga_test(x, y, THRSH, TIMEPRD, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, 1, 1, 1);
-        best_ind(:,:,i) = best;
+        
+        avg_min= zeros(1,10);
+        for t=1:10;
+            best = run_ga_test(x, y, THRSH, TIMEPRD, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, 1, 1, 1);
+            minimum = min(best(best>0))
+            avg_min(1,t)= minimum;
+        end
+            
+        minimum=mean(avg_min);
+        best_ind(1,i)=minimum;
+        
 
 
           

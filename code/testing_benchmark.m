@@ -1,8 +1,8 @@
 
 function tour_lengths = testing_benchmark()
 
-    NIND=[300, 500, 1000];		% Number of individuals
-    MAXGEN=[300];		% Maximum no. of generations
+    NIND=[50,100]%, 500, 1000];		% Number of individuals
+    MAXGEN=[100];		% Maximum no. of generations
     NVAR=26;		% No. of variables
     PRECI=1;		% Precision of variables
     ELITIST=[0.05, 0.1,0.20]%, 0.5, 0.6, 0.95];    % percentage of the elite population
@@ -11,7 +11,7 @@ function tour_lengths = testing_benchmark()
     PR_CROSS=[0.8, 0.85, 0.95]%, 0.15, 0.2];     % probability of crossover
     PR_MUT=[0.05, 0.1, 0.2];       % probability of mutation
     LOCALLOOP=0;      % local loop removal
-    CROSSOVER = 'xalt_edges';
+    CROSSOVER = 'order_crossover';
     THRSH = 0.001;%,0.05, 0.01, 0.005, 0.001, 0.0005];
     TIMEPRD = 35; %[5, 10, 20, 25, 30, 35];
     

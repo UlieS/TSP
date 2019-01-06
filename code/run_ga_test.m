@@ -37,7 +37,7 @@ function best = run_ga_test(x, y, THRSH,TIMEPRD, NIND, MAXGEN, NVAR, ELITIST, ST
         % number of individuals of equal fitness needed to stop
         stopN=ceil(STOP_PERCENTAGE*NIND);
         % evaluate initial population
-        ObjV = tspfun(Chrom,Dist);
+        ObjV = tspfunPath(Chrom,Dist);
         best=zeros(1,MAXGEN);
         % generational loop
         
@@ -84,13 +84,13 @@ function best = run_ga_test(x, y, THRSH,TIMEPRD, NIND, MAXGEN, NVAR, ELITIST, ST
         	SelCh=select('sus', Chrom, FitnV, GGAP);
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
-            SelCh=mutateTSP('inversion',SelCh,PR_MUT);
+            SelCh=mutateTSP('mutate_path',SelCh,PR_MUT);
             %evaluate offspring, call objective function
-        	ObjVSel = tspfun(SelCh,Dist);
+        	ObjVSel = tspfunPath(SelCh,Dist);
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
             
-            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+            Chrom = tsp_ImprovePopulationPath(NIND, NVAR, Chrom,LOCALLOOP,Dist);
         	%increment generation counter
         	gen=gen+1;  
 
